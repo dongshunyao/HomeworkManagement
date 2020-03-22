@@ -14,7 +14,7 @@ public class SubmitHomeworkJdbc {
         var list = new ArrayList<SubmitHomework>();
 
         final String sqlString = "SELECT * FROM submit_homework WHERE homework_id = " + homeworkId;
-        try (Statement statement = JdbcConnection.getInstance().getConnection().createStatement()) {
+        try (Statement statement = JdbcConnection.getInstance().getHikariDataSource().getConnection().createStatement()) {
             try (ResultSet resultSet = statement.executeQuery(sqlString)) {
                 while (resultSet.next()) {
                     var submitHomework = new SubmitHomework();
@@ -40,7 +40,7 @@ public class SubmitHomeworkJdbc {
         }
 
         final String sqlString = "INSERT INTO submit_homework (student_id, homework_id, homework_title, homework_content) VALUES (?, ?, ?, ?);";
-        try (PreparedStatement preparedStatement = JdbcConnection.getInstance().getConnection().prepareStatement(sqlString)) {
+        try (PreparedStatement preparedStatement = JdbcConnection.getInstance().getHikariDataSource().getConnection().prepareStatement(sqlString)) {
             preparedStatement.setInt(1, submitHomework.getStudentId());
             preparedStatement.setInt(2, submitHomework.getHomeworkId());
             preparedStatement.setString(3, submitHomework.getHomeworkTitle());

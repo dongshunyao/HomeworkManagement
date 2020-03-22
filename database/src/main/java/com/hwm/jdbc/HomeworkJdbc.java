@@ -14,7 +14,7 @@ public class HomeworkJdbc {
         var list = new ArrayList<Homework>();
 
         final String sqlString = "SELECT * FROM homework;";
-        try (Statement statement = JdbcConnection.getInstance().getConnection().createStatement()) {
+        try (Statement statement = JdbcConnection.getInstance().getHikariDataSource().getConnection().createStatement()) {
             try (ResultSet resultSet = statement.executeQuery(sqlString)) {
                 while (resultSet.next()) {
                     var homework = new Homework();
@@ -36,7 +36,7 @@ public class HomeworkJdbc {
         var homework = new Homework();
 
         final String sqlString = "SELECT * FROM homework WHERE id = " + homeworkId;
-        try (PreparedStatement preparedStatement = JdbcConnection.getInstance().getConnection().prepareStatement(sqlString)) {
+        try (PreparedStatement preparedStatement = JdbcConnection.getInstance().getHikariDataSource().getConnection().prepareStatement(sqlString)) {
             try (ResultSet resultSet = preparedStatement.executeQuery(sqlString)) {
                 while (resultSet.next()) {
                     homework.setId(resultSet.getInt("id"));
@@ -55,7 +55,7 @@ public class HomeworkJdbc {
 
     public static boolean addHomework(Homework homework) {
         final String sqlString = "INSERT INTO homework (title, content) VALUES (?, ?);";
-        try (PreparedStatement preparedStatement = JdbcConnection.getInstance().getConnection().prepareStatement(sqlString)) {
+        try (PreparedStatement preparedStatement = JdbcConnection.getInstance().getHikariDataSource().getConnection().prepareStatement(sqlString)) {
             preparedStatement.setString(1, homework.getTitle());
             preparedStatement.setString(2, homework.getContent());
             preparedStatement.executeUpdate();
