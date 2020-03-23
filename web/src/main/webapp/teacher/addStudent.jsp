@@ -8,7 +8,7 @@
             添加学生
         </h1>
 
-        <form align="center" action="add_student" method="post">
+        <form align="center" action="${pageContext.request.contextPath}/teacher/add_student" method="post">
             <table align="center" cellpadding="10">
                 <tr>
                     <th>

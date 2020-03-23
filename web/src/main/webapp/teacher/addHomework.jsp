@@ -8,7 +8,7 @@
             添加作业
         </h1>
 
-        <form align="center" action="add_homework" method="post">
+        <form align="center" action="${pageContext.request.contextPath}/teacher/add_homework" method="post">
             <table align="center" cellpadding="10">
                 <tr>
                     <th>

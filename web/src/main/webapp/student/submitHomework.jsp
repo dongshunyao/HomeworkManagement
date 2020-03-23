@@ -11,7 +11,7 @@
         <%
             Homework homework = (Homework) request.getAttribute("homework");
         %>
-        <form align="center" action="submit_homework" method="post">
+        <form align="center" action="${pageContext.request.contextPath}/student/submit_homework" method="post">
             <table align="center" cellpadding="10" style="text-align: center;">
                 <tr>
                     <th>

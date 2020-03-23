@@ -21,17 +21,17 @@
             </a>
         </h3>
         <h3 style="text-align: center;">
-            <a target="_blank" href="student_list">
+            <a target="_blank" href="${pageContext.request.contextPath}/teacher/student_list">
                 查看学生列表
             </a>
         </h3>
         <h3 style="text-align: center;">
-            <a target="_blank" href="homework_list">
+            <a target="_blank" href="${pageContext.request.contextPath}/teacher/homework_list">
                 查看作业列表
             </a>
         </h3>
         <h3 style="text-align: center;">
-            <a href="/index.jsp">
+            <a href="${pageContext.request.contextPath}/index.jsp">
                 返回主页
             </a>
         </h3>

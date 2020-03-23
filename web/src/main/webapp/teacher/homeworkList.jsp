@@ -20,7 +20,7 @@
         <%
         } else {
         %>
-        <form id="homework" method="post" action="submit_homework_list">
+        <form id="homework" method="post" action="${pageContext.request.contextPath}/teacher/submit_homework_list">
             <table align="center" cellpadding="8" style="text-align: center; width: 1024px;">
                 <input id="homeworkId" name="homeworkId" type="hidden">
                 <tr style="background-color: lightblue;">
