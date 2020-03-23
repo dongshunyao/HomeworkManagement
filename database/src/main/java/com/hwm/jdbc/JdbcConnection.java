@@ -29,6 +29,12 @@ public class JdbcConnection {
         hikariConfig.setDriverClassName(driverName);
         hikariConfig.setJdbcUrl(url);
         hikariDataSource = new HikariDataSource(hikariConfig);
+
+        hikariDataSource.setIdleTimeout(60000);
+        hikariDataSource.setConnectionTimeout(60000);
+        hikariDataSource.setValidationTimeout(3000);
+        hikariDataSource.setMaxLifetime(60000);
+        hikariDataSource.setMaximumPoolSize(10);
     }
 
     public HikariDataSource getHikariDataSource() {
