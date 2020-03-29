@@ -12,6 +12,7 @@
         <module>core</module>
         <module>database</module>
         <module>web</module>
+        <module>web-mvc</module>
     </modules>
 
 </project>
