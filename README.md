@@ -18,6 +18,13 @@
 
 ## 更新
 
+### Ver. 2.0
+
+- 添加 web-mvc module
+- 新 module 使用 spring-webmvc 重构 web module
+
+### Ver. 1.0
+
 在源项目的基础上更新如下：
 
 - Maven 项目，用于构建和管理依赖
