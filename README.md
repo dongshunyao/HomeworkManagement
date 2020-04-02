@@ -18,6 +18,19 @@
 
 ## 更新
 
+### Ver 3.0
+
+- 使用 Spring IoC 管理对象
+- 添加 database-mvc module，派生自 database module
+  - web-mvc-context.xml 中添加 component-scan
+  - jdbc 包均使用 @Component 注册为 Bean
+  - 使用 @Autowired 装配对象
+- 重构 controller 包，使用 @Autowired 装配对象
+- 更新依赖
+  - web-mvc 对应 database-mvc
+  - web 对应 database
+- 添加数据库 SQL 转储文件
+
 ### Ver. 2.0
 
 - 添加 web-mvc module
