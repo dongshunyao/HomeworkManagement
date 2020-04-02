@@ -37,7 +37,7 @@
         </dependency>
         <dependency>
             <groupId>org.hwm</groupId>
-            <artifactId>database</artifactId>
+            <artifactId>database-mvc</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>

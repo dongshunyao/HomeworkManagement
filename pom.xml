@@ -13,6 +13,7 @@
         <module>database</module>
         <module>web</module>
         <module>web-mvc</module>
+        <module>database-mvc</module>
     </modules>
 
 </project>
