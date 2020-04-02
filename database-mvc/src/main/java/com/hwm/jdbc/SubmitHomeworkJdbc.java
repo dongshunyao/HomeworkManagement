@@ -1,17 +1,27 @@
 package com.hwm.jdbc;
 
 import com.hwm.model.SubmitHomework;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class SubmitHomeworkJdbc {
-    public static List<SubmitHomework> select(int homeworkId) {
+    private JdbcConnection jdbcConnection;
+
+    @Autowired
+    public SubmitHomeworkJdbc(JdbcConnection jdbcConnection) {
+        this.jdbcConnection = jdbcConnection;
+    }
+
+    public List<SubmitHomework> select(int homeworkId) {
         var list = new ArrayList<SubmitHomework>();
 
         final String sqlString = "SELECT * FROM submit_homework WHERE homework_id = " + homeworkId;
-        try (Connection connection = JdbcConnection.getInstance().getHikariDataSource().getConnection()) {
+        try (Connection connection = jdbcConnection.getHikariDataSource().getConnection()) {
             try (Statement statement = connection.createStatement()) {
                 try (ResultSet resultSet = statement.executeQuery(sqlString)) {
                     while (resultSet.next()) {
@@ -33,13 +43,9 @@ public class SubmitHomeworkJdbc {
         return list;
     }
 
-    public static boolean addSubmitHomework(SubmitHomework submitHomework) {
-        if (StudentJdbc.select(submitHomework.getStudentId()) == null) {
-            return false;
-        }
-
+    public boolean addSubmitHomework(SubmitHomework submitHomework) {
         final String sqlString = "INSERT INTO submit_homework (student_id, homework_id, homework_title, homework_content) VALUES (?, ?, ?, ?);";
-        try (Connection connection = JdbcConnection.getInstance().getHikariDataSource().getConnection()) {
+        try (Connection connection = jdbcConnection.getHikariDataSource().getConnection()) {
             try (PreparedStatement preparedStatement = connection.prepareStatement(sqlString)) {
                 preparedStatement.setInt(1, submitHomework.getStudentId());
                 preparedStatement.setInt(2, submitHomework.getHomeworkId());

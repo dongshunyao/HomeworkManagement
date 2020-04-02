@@ -2,24 +2,13 @@ package com.hwm.jdbc;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import org.springframework.stereotype.Component;
 
+@Component
 public class JdbcConnection {
-    private static JdbcConnection jdbcConnection = null;
     private HikariDataSource hikariDataSource;
 
-    public static JdbcConnection getInstance() {
-        // 双层锁，提高性能
-        if (jdbcConnection == null) {
-            synchronized (JdbcConnection.class) {
-                if (jdbcConnection == null) {
-                    jdbcConnection = new JdbcConnection();
-                }
-            }
-        }
-        return jdbcConnection;
-    }
-
-    private JdbcConnection() {
+    public JdbcConnection() {
         final String url = "jdbc:mysql://localhost:3306/hwm?serverTimezone=GMT%2B8";
         final String driverName = "com.mysql.cj.jdbc.Driver";
 
