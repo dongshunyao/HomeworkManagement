@@ -22,6 +22,7 @@ public class StudentJdbc {
 
         final String sqlString = "SELECT * FROM student;";
         try (Connection connection = jdbcConnection.getHikariDataSource().getConnection()) {
+            connection.setAutoCommit(false);
             try (Statement statement = connection.createStatement()) {
                 try (ResultSet resultSet = statement.executeQuery(sqlString)) {
                     while (resultSet.next()) {
@@ -31,7 +32,11 @@ public class StudentJdbc {
                         student.setCreateTime(resultSet.getTimestamp("create_time"));
                         list.add(student);
                     }
+                    connection.commit();
                 }
+            } catch (SQLException e) {
+                connection.rollback();
+                e.printStackTrace();
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -45,17 +50,22 @@ public class StudentJdbc {
 
         final String sqlString = "SELECT * FROM student WHERE id = " + studentId;
         try (Connection connection = jdbcConnection.getHikariDataSource().getConnection()) {
+            connection.setAutoCommit(false);
             try (PreparedStatement preparedStatement = connection.prepareStatement(sqlString)) {
                 try (ResultSet resultSet = preparedStatement.executeQuery(sqlString)) {
-
                     if (resultSet.next()) {
                         student.setId(resultSet.getInt("id"));
                         student.setName(resultSet.getString("name"));
                         student.setCreateTime(resultSet.getTimestamp("create_time"));
+                        connection.commit();
                     } else {
+                        connection.commit();
                         return null;
                     }
                 }
+            } catch (SQLException e) {
+                connection.rollback();
+                e.printStackTrace();
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -67,10 +77,15 @@ public class StudentJdbc {
     public boolean addStudent(Student student) {
         final String sqlString = "INSERT INTO student (id, name) VALUES (?, ?);";
         try (Connection connection = jdbcConnection.getHikariDataSource().getConnection()) {
+            connection.setAutoCommit(false);
             try (PreparedStatement preparedStatement = connection.prepareStatement(sqlString)) {
                 preparedStatement.setInt(1, student.getId());
                 preparedStatement.setString(2, student.getName());
                 preparedStatement.executeUpdate();
+                connection.commit();
+            } catch (SQLException e) {
+                connection.rollback();
+                e.printStackTrace();
             }
         } catch (SQLException e) {
             e.printStackTrace();

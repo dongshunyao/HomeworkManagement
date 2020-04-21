@@ -22,6 +22,7 @@ public class SubmitHomeworkJdbc {
 
         final String sqlString = "SELECT * FROM submit_homework WHERE homework_id = " + homeworkId;
         try (Connection connection = jdbcConnection.getHikariDataSource().getConnection()) {
+            connection.setAutoCommit(false);
             try (Statement statement = connection.createStatement()) {
                 try (ResultSet resultSet = statement.executeQuery(sqlString)) {
                     while (resultSet.next()) {
@@ -34,7 +35,11 @@ public class SubmitHomeworkJdbc {
                         submitHomework.setCreateTime(resultSet.getTimestamp("create_time"));
                         list.add(submitHomework);
                     }
+                    connection.commit();
                 }
+            } catch (SQLException e) {
+                connection.rollback();
+                e.printStackTrace();
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -46,12 +51,17 @@ public class SubmitHomeworkJdbc {
     public boolean addSubmitHomework(SubmitHomework submitHomework) {
         final String sqlString = "INSERT INTO submit_homework (student_id, homework_id, homework_title, homework_content) VALUES (?, ?, ?, ?);";
         try (Connection connection = jdbcConnection.getHikariDataSource().getConnection()) {
+            connection.setAutoCommit(false);
             try (PreparedStatement preparedStatement = connection.prepareStatement(sqlString)) {
                 preparedStatement.setInt(1, submitHomework.getStudentId());
                 preparedStatement.setInt(2, submitHomework.getHomeworkId());
                 preparedStatement.setString(3, submitHomework.getHomeworkTitle());
                 preparedStatement.setString(4, submitHomework.getHomeworkContent());
                 preparedStatement.executeUpdate();
+                connection.commit();
+            } catch (SQLException e) {
+                connection.rollback();
+                e.printStackTrace();
             }
         } catch (SQLException e) {
             e.printStackTrace();

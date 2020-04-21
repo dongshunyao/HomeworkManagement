@@ -22,6 +22,7 @@ public class HomeworkJdbc {
 
         final String sqlString = "SELECT * FROM homework;";
         try (Connection connection = jdbcConnection.getHikariDataSource().getConnection()) {
+            connection.setAutoCommit(false);
             try (Statement statement = connection.createStatement()) {
                 try (ResultSet resultSet = statement.executeQuery(sqlString)) {
                     while (resultSet.next()) {
@@ -32,7 +33,11 @@ public class HomeworkJdbc {
                         homework.setCreateTime(resultSet.getTimestamp("create_time"));
                         list.add(homework);
                     }
+                    connection.commit();
                 }
+            } catch (SQLException e) {
+                connection.rollback();
+                e.printStackTrace();
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -46,6 +51,7 @@ public class HomeworkJdbc {
 
         final String sqlString = "SELECT * FROM homework WHERE id = " + homeworkId;
         try (Connection connection = jdbcConnection.getHikariDataSource().getConnection()) {
+            connection.setAutoCommit(false);
             try (PreparedStatement preparedStatement = connection.prepareStatement(sqlString)) {
                 try (ResultSet resultSet = preparedStatement.executeQuery(sqlString)) {
                     while (resultSet.next()) {
@@ -54,7 +60,11 @@ public class HomeworkJdbc {
                         homework.setContent(resultSet.getString("content"));
                         homework.setCreateTime(resultSet.getTimestamp("create_time"));
                     }
+                    connection.commit();
                 }
+            } catch (SQLException e) {
+                connection.rollback();
+                e.printStackTrace();
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -67,10 +77,15 @@ public class HomeworkJdbc {
     public boolean addHomework(Homework homework) {
         final String sqlString = "INSERT INTO homework (title, content) VALUES (?, ?);";
         try (Connection connection = jdbcConnection.getHikariDataSource().getConnection()) {
+            connection.setAutoCommit(false);
             try (PreparedStatement preparedStatement = connection.prepareStatement(sqlString)) {
                 preparedStatement.setString(1, homework.getTitle());
                 preparedStatement.setString(2, homework.getContent());
                 preparedStatement.executeUpdate();
+                connection.commit();
+            } catch (SQLException e) {
+                connection.rollback();
+                e.printStackTrace();
             }
         } catch (SQLException e) {
             e.printStackTrace();
