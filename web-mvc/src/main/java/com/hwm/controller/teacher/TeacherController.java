@@ -1,10 +1,6 @@
 package com.hwm.controller.teacher;
 
-import com.hwm.jdbc.HomeworkJdbc;
-import com.hwm.jdbc.StudentJdbc;
-import com.hwm.jdbc.SubmitHomeworkJdbc;
-import com.hwm.model.Homework;
-import com.hwm.model.Student;
+import com.hwm.service.teacher.TeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,15 +12,11 @@ import java.io.UnsupportedEncodingException;
 @Controller
 @RequestMapping("/teacher")
 public class TeacherController {
-    private HomeworkJdbc homeworkJdbc;
-    private StudentJdbc studentJdbc;
-    private SubmitHomeworkJdbc submitHomeworkJdbc;
+    private TeacherService teacherService;
 
     @Autowired
-    public TeacherController(HomeworkJdbc homeworkJdbc, StudentJdbc studentJdbc, SubmitHomeworkJdbc submitHomeworkJdbc) {
-        this.homeworkJdbc = homeworkJdbc;
-        this.studentJdbc = studentJdbc;
-        this.submitHomeworkJdbc = submitHomeworkJdbc;
+    public TeacherController(TeacherService teacherService) {
+        this.teacherService = teacherService;
     }
 
     @RequestMapping(value = "/add_homework", method = RequestMethod.POST)
@@ -35,12 +27,8 @@ public class TeacherController {
             e.printStackTrace();
         }
 
-        Homework homework = new Homework();
-        homework.setTitle(req.getParameter("title"));
-        homework.setContent(req.getParameter("content"));
-
         String info;
-        if (homeworkJdbc.addHomework(homework)) {
+        if (teacherService.addHomework(req.getParameter("title"), req.getParameter("content"))) {
             info = "添加作业成功";
         } else {
             info = "添加失败";
@@ -58,12 +46,8 @@ public class TeacherController {
             e.printStackTrace();
         }
 
-        Student student = new Student();
-        student.setId(Integer.parseInt(req.getParameter("id")));
-        student.setName(req.getParameter("name"));
-
         String info;
-        if (studentJdbc.addStudent(student)) {
+        if (teacherService.addStudent(Integer.parseInt(req.getParameter("id")), req.getParameter("name"))) {
             info = "添加学生成功";
         } else {
             info = "添加失败，学号已经存在";
@@ -75,22 +59,19 @@ public class TeacherController {
 
     @RequestMapping("/homework_list")
     public String homeworkList(HttpServletRequest req) {
-        var list = homeworkJdbc.selectAll();
-        req.setAttribute("list", list);
+        req.setAttribute("list", teacherService.homeworkList());
         return "homeworkList.jsp";
     }
 
     @RequestMapping("/student_list")
     public String studentList(HttpServletRequest req) {
-        var list = studentJdbc.selectAll();
-        req.setAttribute("list", list);
+        req.setAttribute("list", teacherService.studentList());
         return "studentList.jsp";
     }
 
     @RequestMapping("/submit_homework_list")
     public String submitHomeworkList(HttpServletRequest req) {
-        var list = submitHomeworkJdbc.select(Integer.parseInt(req.getParameter("homeworkId")));
-        req.setAttribute("list", list);
+        req.setAttribute("list", teacherService.submitHomeworkList(Integer.parseInt(req.getParameter("homeworkId"))));
         return "submitHomeworkList.jsp";
     }
 }

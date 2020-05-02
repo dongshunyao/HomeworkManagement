@@ -18,6 +18,10 @@
 
 ## 更新
 
+### Ver ?
+
+- 拆分 controller 和 service
+
 ### Ver 4.0
 
 - 实现数据库操作的事务管理
