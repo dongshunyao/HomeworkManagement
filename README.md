@@ -18,9 +18,12 @@
 
 ## 更新
 
-### Ver ?
+### Ver 5.0
 
+- 所有模块合并至 **web-mvc**，其他模块留作存档
 - 拆分 controller 和 service
+- 使用 lombok 重构 model
+- 使用 MyBatis 进行数据库连接
 
 ### Ver 4.0
 

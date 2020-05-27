@@ -1,10 +1,9 @@
 package com.hwm.service.student;
 
-import com.hwm.jdbc.HomeworkJdbc;
-import com.hwm.jdbc.StudentJdbc;
-import com.hwm.jdbc.SubmitHomeworkJdbc;
+import com.hwm.mapper.HomeworkMapper;
+import com.hwm.mapper.StudentMapper;
+import com.hwm.mapper.SubmitHomeworkMapper;
 import com.hwm.model.Homework;
-import com.hwm.model.SubmitHomework;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,35 +11,28 @@ import java.util.List;
 
 @Service
 public class StudentService {
-    private HomeworkJdbc homeworkJdbc;
-    private StudentJdbc studentJdbc;
-    private SubmitHomeworkJdbc submitHomeworkJdbc;
+    private HomeworkMapper homeworkMapper;
+    private StudentMapper studentMapper;
+    private SubmitHomeworkMapper submitHomeworkMapper;
 
     @Autowired
-    public StudentService(HomeworkJdbc homeworkJdbc, StudentJdbc studentJdbc, SubmitHomeworkJdbc submitHomeworkJdbc) {
-        this.homeworkJdbc = homeworkJdbc;
-        this.studentJdbc = studentJdbc;
-        this.submitHomeworkJdbc = submitHomeworkJdbc;
+    public StudentService(HomeworkMapper homeworkMapper, StudentMapper studentMapper, SubmitHomeworkMapper submitHomeworkMapper) {
+        this.homeworkMapper = homeworkMapper;
+        this.studentMapper = studentMapper;
+        this.submitHomeworkMapper = submitHomeworkMapper;
     }
 
     public List<Homework> homeworkList() {
-        return homeworkJdbc.selectAll();
+        return homeworkMapper.selectAll();
     }
 
     public Homework homework(int homeworkId) {
-        return homeworkJdbc.select(homeworkId);
+        return homeworkMapper.select(homeworkId);
     }
 
     public boolean submitHomework(int studentId, int homeworkId, String homeworkTitle, String homeworkContent) {
-        var submitHomework = new SubmitHomework();
-
-        submitHomework.setStudentId(studentId);
-        submitHomework.setHomeworkId(homeworkId);
-        submitHomework.setHomeworkTitle(homeworkTitle);
-        submitHomework.setHomeworkContent(homeworkContent);
-
-        if (studentJdbc.select(submitHomework.getStudentId()) != null) {
-            return submitHomeworkJdbc.addSubmitHomework(submitHomework);
+        if (studentMapper.select(studentId) != null) {
+            return submitHomeworkMapper.addSubmitHomework(studentId, homeworkId, homeworkTitle, homeworkContent);
         }
         return false;
     }

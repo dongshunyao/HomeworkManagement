@@ -1,8 +1,8 @@
 package com.hwm.service.teacher;
 
-import com.hwm.jdbc.HomeworkJdbc;
-import com.hwm.jdbc.StudentJdbc;
-import com.hwm.jdbc.SubmitHomeworkJdbc;
+import com.hwm.mapper.HomeworkMapper;
+import com.hwm.mapper.StudentMapper;
+import com.hwm.mapper.SubmitHomeworkMapper;
 import com.hwm.model.Homework;
 import com.hwm.model.Student;
 import com.hwm.model.SubmitHomework;
@@ -13,42 +13,34 @@ import java.util.List;
 
 @Service
 public class TeacherService {
-    private HomeworkJdbc homeworkJdbc;
-    private StudentJdbc studentJdbc;
-    private SubmitHomeworkJdbc submitHomeworkJdbc;
+    private HomeworkMapper homeworkMapper;
+    private StudentMapper studentMapper;
+    private SubmitHomeworkMapper submitHomeworkMapper;
 
     @Autowired
-    public TeacherService(HomeworkJdbc homeworkJdbc, StudentJdbc studentJdbc, SubmitHomeworkJdbc submitHomeworkJdbc) {
-        this.homeworkJdbc = homeworkJdbc;
-        this.studentJdbc = studentJdbc;
-        this.submitHomeworkJdbc = submitHomeworkJdbc;
+    public TeacherService(HomeworkMapper homeworkMapper, StudentMapper studentMapper, SubmitHomeworkMapper submitHomeworkMapper) {
+        this.homeworkMapper = homeworkMapper;
+        this.studentMapper = studentMapper;
+        this.submitHomeworkMapper = submitHomeworkMapper;
     }
 
     public List<Homework> homeworkList() {
-        return homeworkJdbc.selectAll();
+        return homeworkMapper.selectAll();
     }
 
     public List<Student> studentList() {
-        return studentJdbc.selectAll();
+        return studentMapper.selectAll();
     }
 
     public List<SubmitHomework> submitHomeworkList(int homeworkId) {
-        return submitHomeworkJdbc.select(homeworkId);
+        return submitHomeworkMapper.select(homeworkId);
     }
 
     public boolean addStudent(int id, String name) {
-        Student student = new Student();
-        student.setId(id);
-        student.setName(name);
-
-        return studentJdbc.addStudent(student);
+        return studentMapper.addStudent(id, name);
     }
 
     public boolean addHomework(String title, String content) {
-        Homework homework = new Homework();
-        homework.setTitle(title);
-        homework.setContent(content);
-
-        return homeworkJdbc.addHomework(homework);
+        return homeworkMapper.addHomework(title, content);
     }
 }
